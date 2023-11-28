@@ -16,9 +16,7 @@ jobs:
           java-version: 1.8
 
       - name: Install cypress and verify
-        run: |
-          npm ci
-          $(npm bin)/cypress verify
+        run: npm install cypress --save-dev
 
       - name: Run Cypress tests
         run: npm run test:allure
