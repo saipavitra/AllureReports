@@ -16,16 +16,6 @@
           with:
             java-version: 1.8
   
-        - name: Install cypress and verify
-          run: npm install cypress --save-dev
-          
-        - name: Install allure plugins
-          run: npm i -D @shelex/cypress-allure-plugin
-         
-        - name: Install allure command-line plugins
-          run: npm install --save-dev mocha-allure-reporter allure-commandline
-  
-  
         - name: Run Cypress tests
           run: npm run test:allure
           continue-on-error: true
