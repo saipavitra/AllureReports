@@ -24,7 +24,7 @@
           
         - name: Copy test execution videos, screenshots and reports
           run: |
-            mkdir public
+            mkdir -p allure-history
             cp -r cypress/videos public/videos
             cp -r cypress/screenshots public/screenshots
             cp -a allure-report/. public
@@ -36,7 +36,7 @@
   
         - name: Copy test execution videos, screenshots and reports
           run: |
-            mkdir public
+            mkdir -p allure-history
             cp -r cypress/videos public/videos
             cp -r cypress/screenshots public/screenshots
             cp -a allure-report/. public
