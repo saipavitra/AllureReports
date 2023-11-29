@@ -8,6 +8,7 @@
     "test:allure": "npm run cy:clientLogin || npm run report:allure",
     "cy:clientLogin": "cypress run --spec cypress/e2e/1-getting-started/**.js --reporter mocha-allure-reporter"
   },
+  
   "author": "",
   "license": "ISC",
   "devDependencies": {
