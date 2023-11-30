@@ -8,7 +8,7 @@
     "test:allure": "npm run cy:clientLogin || npm run report:allure",
     "cy:clientLogin": "cypress run --spec cypress/e2e/1-getting-started/**.js --reporter mocha-allure-reporter"
     
-    "allure:history": "mv -f allure-report/latest/history allure-results/history && rm -r allure-report/latest || true",
+    
     "cy:open": "yarn cypress open --env allure=true --browser chrome",
     "cy:run": "yarn cypress run --config video=false --env allure=true --browser chrome",
   },
