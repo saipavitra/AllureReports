@@ -17,7 +17,7 @@ jobs:
 
             - name: Check Cypress cache
               run: |
-               npx cypress install
+               npm install
                   npx cypress cache path
                   npx cypress cache list
 
