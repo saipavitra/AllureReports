@@ -13,8 +13,11 @@ jobs:
               env:
                   CYPRESS_INSTALL_BINARY: 0
 
+
+
             - name: Check Cypress cache
               run: |
+               npx cypress install
                   npx cypress cache path
                   npx cypress cache list
 
@@ -64,7 +67,6 @@ jobs:
 
             - name: Install Cypress
               run: |
-                npm install
                   npx cypress install
                   npx cypress cache list
 
