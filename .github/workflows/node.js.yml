@@ -1,49 +1,70 @@
-  name: Generate Cypress Report
-  on:
-    push:
-      branches:
-        - 'main'
-  
-  jobs:
-    cypress-test:
-      name: Run on Chrome 83
-      runs-on: ubuntu-latest
-      container: cypress/browsers:node12.18.0-chrome83-ff77
-      steps:
-        - uses: actions/checkout@v3
-        - name: Download Cypress
-        - uses: bahmutov/npm-install@v1
-        - uses: cypress-io/github-action@v6
-          with:
-                  run: npm i --force
-          env:
-                  CYPRESS_INSTALL_BINARY: 0
-                  
-        - name: Install Cypress
-          run: npx cypress install
-          
-        - name: Copy test execution videos, screenshots and reports
-          run: |
-            mkdir public
-            cp -r cypress/videos public/videos
-            cp -r cypress/screenshots public/screenshots
-            cp -a allure-report/. public
-            cp -r allure-results public/allure-results
-  
-        - name: Run Cypress tests
-          run: npm run test:allure
-          continue-on-error: true
-  
-        - name: Copy test execution videos, screenshots and reports
-          run: |
-            mkdir public
-            cp -r cypress/videos public/videos
-            cp -r cypress/screenshots public/screenshots
-            cp -a allure-report/. public
-            cp -r allure-results public/allure-results
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Allure Report CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node12.18.0-chrome83-ff77
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Download Cypress
+      uses: bahmutov/npm-install@v1
+      with:
+        run: npm i --force
+      env:
+        CYPRESS_INSTALL_BINARY: 0
+
+    
+    - name: Install Cypress
+      run: npx cypress install
+      
+    - name: Run Cypress tests
+      run: npm run test:allure
+      continue-on-error: true
+      
+    - uses: actions/upload-artifact@master
+      with:
+        name: allure-results
+        path: allure-results
+        retention-days: 20
         
-        - name: Deploy report page to GitHub Page
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./public
+    - name: Get Allure history
+      uses: actions/checkout@v2
+      if: always()
+      continue-on-error: true
+      with:
+        ref: gh-pages
+        path: gh-pages
+    
+    - name: Test marketplace action
+      uses: simple-elf/allure-report-action@master
+      if: always()
+      id: allure-report
+      with:
+        allure_results: allure-results
+        gh_pages: gh-pages
+        allure_report: allure-report
+        allure_history: allure-history
+        keep_reports: 20
+
+    - name: Deploy report to Github Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v2
+      env:
+        PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: allure-history
