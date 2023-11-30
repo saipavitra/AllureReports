@@ -22,10 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Download Cypress
-    - uses: bahmutov/npm-install@v1
-    - uses: cypress-io/github-action@v6
-      with:
-        run: npm i --force
+      run: npm i --force
       env:
         CYPRESS_INSTALL_BINARY: 0
 
