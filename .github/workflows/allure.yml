@@ -64,6 +64,7 @@ jobs:
 
             - name: Install Cypress
               run: |
+                npm install
                   npx cypress install
                   npx cypress cache list
 
